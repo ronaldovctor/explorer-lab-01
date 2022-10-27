@@ -1,9 +1,11 @@
 import './css/index.css'
 import IMask from 'imask'
 
-const ccBgColor01 = document.querySelector('.cc-bg svg > g g:nth-child(1) path')
-const ccBgColor02 = document.querySelector('.cc-bg svg > g g:nth-child(2) path')
-const ccLogo = document.querySelector('.cc-logo span:nth-child(2) img')
+const $ = (selector) => document.querySelector(selector)
+
+const ccBgColor01 = $('.cc-bg svg > g g:nth-child(1) path')
+const ccBgColor02 = $('.cc-bg svg > g g:nth-child(2) path')
+const ccLogo = $('.cc-logo span:nth-child(2) img')
 
 const cards = {
 	visa: 'visa',
@@ -46,15 +48,15 @@ function setCardType(type) {
 
 setCardType(cards.mastercard)
 
-const securityCode = document.querySelector('#security-code')
+const securityCode = $('#security-code')
 const securityCodePattern = masks.securityCode
 const securityCodeMasked = IMask(securityCode, securityCodePattern)
 
-const expirationDate = document.querySelector('#expiration-date')
+const expirationDate = $('#expiration-date')
 const expirationDatePattern = masks.expirationDate
 const expirationDateMasked = IMask(expirationDate, expirationDatePattern)
 
-const cardNumber = document.querySelector('#card-number')
+const cardNumber = $('#card-number')
 
 const cardNumberPattern = {
 	mask: [
@@ -78,9 +80,52 @@ const cardNumberPattern = {
 		const foundMask = dynamicMasked.compiledMasks.find(({ regex }) =>
 			number.match(regex)
 		)
-		console.log(foundMask.cardtype)
 		return foundMask
 	},
 }
 
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern)
+
+const addButton = $('#add-card')
+addButton.addEventListener('click', () => {})
+
+const formCard = $('#card-form')
+formCard.addEventListener('submit', (event) => {
+	event.preventDefault()
+})
+
+const cardHolder = $('#card-holder')
+cardHolder.addEventListener('input', ({ target }) => {
+	const ccHolder = $('.cc-holder .value')
+	ccHolder.innerText = target.value || 'FULANO DA SILVA'
+})
+
+securityCodeMasked.on('accept', () => {
+	updateSecurityCodeMasked(securityCodeMasked.value)
+})
+
+function updateSecurityCodeMasked(code) {
+	const ccSecurity = $('.cc-security .value')
+	ccSecurity.innerText = code || '123'
+}
+
+cardNumberMasked.on('accept', () => {
+	updateCardNumberMasked(cardNumberMasked.value)
+})
+
+function updateCardNumberMasked(code) {
+	const ccNumber = $('.cc-number')
+	ccNumber.innerText = code || '1234 5678 9012 3456'
+
+	const cardType = cardNumberMasked.masked.currentMask.cardtype
+	setCardType(cardType)
+}
+
+expirationDateMasked.on('accept', () => {
+	updateExpirationDate(expirationDateMasked.value)
+})
+
+function updateExpirationDate(date) {
+	const ccExpiration = $('.cc-extra .value')
+	ccExpiration.innerText = date || '02/32'
+}
