@@ -45,4 +45,4 @@ Esse projeto está sob a licença MIT.
 
 ---
 
-Feito durante Ignite Lab - Rocketseat :wave: [Participe da nossa comunidade!](https://discord.gg/rocketseat)
+Feito por mim durante Ignite Lab - Rocketseat :wave:
